@@ -1,1 +1,1 @@
-"# Beer Stock" 
+# Beer Stock
