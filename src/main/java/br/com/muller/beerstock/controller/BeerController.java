@@ -1,8 +1,10 @@
 package br.com.muller.beerstock.controller;
 
 import br.com.muller.beerstock.dto.BeerDTO;
+import br.com.muller.beerstock.dto.QuantityDTO;
 import br.com.muller.beerstock.exception.BeerAlreadyRegisteredException;
 import br.com.muller.beerstock.exception.BeerNotFoundException;
+import br.com.muller.beerstock.exception.BeerStockExceededException;
 import br.com.muller.beerstock.service.BeerService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,4 +43,16 @@ public class BeerController implements BeerControllerDocs{
     public void deleteById(@PathVariable Long id) throws BeerNotFoundException {
         beerService.deleteById(id);
     }
+
+    @PatchMapping("/{id}/increment")
+    public BeerDTO increment(@PathVariable Long id,@RequestBody @Valid QuantityDTO quantityToIncrement) throws BeerNotFoundException, BeerStockExceededException {
+        return beerService.increment(id, quantityToIncrement.getQuantity());
+    }
+
+    @PatchMapping("/{id}/decrement")
+    public BeerDTO decrement(@PathVariable Long id,@RequestBody @Valid QuantityDTO quantityToDecrement) throws BeerNotFoundException, BeerStockExceededException {
+        return beerService.increment(id, quantityToDecrement.getQuantity());
+    }
+
+
 }
