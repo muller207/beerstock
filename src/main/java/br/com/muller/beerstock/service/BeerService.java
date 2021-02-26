@@ -2,10 +2,7 @@ package br.com.muller.beerstock.service;
 
 import br.com.muller.beerstock.dto.BeerDTO;
 import br.com.muller.beerstock.entity.Beer;
-import br.com.muller.beerstock.exception.BeerAlreadyRegisteredException;
-import br.com.muller.beerstock.exception.BeerNotFoundException;
-import br.com.muller.beerstock.exception.BeerStockExceededException;
-import br.com.muller.beerstock.exception.BeerStockLessThenZeroException;
+import br.com.muller.beerstock.exception.*;
 import br.com.muller.beerstock.mapper.BeerMapper;
 import br.com.muller.beerstock.repository.BeerRepository;
 import lombok.AllArgsConstructor;
@@ -59,7 +56,9 @@ public class BeerService {
     }
 
 
-    public BeerDTO increment(Long id, int quantityToIncrement) throws BeerNotFoundException, BeerStockExceededException {
+    public BeerDTO increment(Long id, int quantityToIncrement) throws BeerNotFoundException, BeerStockExceededException, QuantityLessThanZeroException {
+        if(quantityToIncrement<0)
+            throw new QuantityLessThanZeroException(quantityToIncrement);
         Beer foundBeer = verifyIfExists(id);
         if (foundBeer.getQuantity()+quantityToIncrement > foundBeer.getMax())
             throw new BeerStockExceededException(id, quantityToIncrement);
@@ -68,7 +67,9 @@ public class BeerService {
         return beerMapper.toDTO(savedBeer);
     }
 
-    public BeerDTO decrement(Long id, int quantityToDecrement) throws BeerNotFoundException, BeerStockLessThenZeroException {
+    public BeerDTO decrement(Long id, int quantityToDecrement) throws BeerNotFoundException, BeerStockLessThenZeroException, QuantityLessThanZeroException {
+        if(quantityToDecrement<0)
+            throw new QuantityLessThanZeroException(quantityToDecrement);
         Beer foundBeer = verifyIfExists(id);
         if (foundBeer.getQuantity()-quantityToDecrement < 0)
             throw new BeerStockLessThenZeroException(id, quantityToDecrement);

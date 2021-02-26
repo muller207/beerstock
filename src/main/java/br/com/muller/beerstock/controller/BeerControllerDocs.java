@@ -3,9 +3,7 @@ package br.com.muller.beerstock.controller;
 import br.com.muller.beerstock.dto.BeerDTO;
 import br.com.muller.beerstock.dto.QuantityDTO;
 import br.com.muller.beerstock.entity.Beer;
-import br.com.muller.beerstock.exception.BeerAlreadyRegisteredException;
-import br.com.muller.beerstock.exception.BeerNotFoundException;
-import br.com.muller.beerstock.exception.BeerStockExceededException;
+import br.com.muller.beerstock.exception.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -49,7 +47,7 @@ public interface BeerControllerDocs {
             @ApiResponse(code = 400, message = "Quantity to increment is greater than max"),
             @ApiResponse(code = 404, message = "Beer with given id not found"),
     })
-    BeerDTO increment(@PathVariable Long id, QuantityDTO quantityToIncrement) throws BeerNotFoundException, BeerStockExceededException;
+    BeerDTO increment(@PathVariable Long id, QuantityDTO quantityToIncrement) throws BeerNotFoundException, BeerStockExceededException, QuantityLessThanZeroException;
 
     @ApiOperation("Decrement a beer stock quantity given valid Id and quantity greater than 0")
     @ApiResponses(value = {
@@ -57,5 +55,5 @@ public interface BeerControllerDocs {
             @ApiResponse(code = 400, message = "Quantity to decrement is less than 0"),
             @ApiResponse(code = 404, message = "Beer with given id not found"),
     })
-    BeerDTO decrement(@PathVariable Long id, QuantityDTO quantityToDecrement) throws BeerNotFoundException, BeerStockExceededException;
+    BeerDTO decrement(@PathVariable Long id, QuantityDTO quantityToDecrement) throws BeerNotFoundException, BeerStockLessThenZeroException, QuantityLessThanZeroException;
 }
